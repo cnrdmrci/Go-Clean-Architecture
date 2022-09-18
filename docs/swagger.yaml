@@ -1,0 +1,104 @@
+basePath: /
+definitions:
+  entities.User:
+    properties:
+      age:
+        type: integer
+      gender:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: none
+    name: Caner Demirci
+    url: none
+  description: User CRUD endpoints
+  termsOfService: http://swagger.io/terms/
+  title: Clean Architecture Swagger API
+  version: "1.0"
+paths:
+  /v1/users/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User data
+        in: body
+        name: json
+        required: true
+        schema:
+          $ref: '#/definitions/entities.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user created.
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+      summary: create user.
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: User data
+        in: body
+        name: json
+        schema:
+          $ref: '#/definitions/entities.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user updated.
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+      summary: update user
+  /v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user deleted.
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+      summary: delete user.
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: read user by id.
+swagger: "2.0"
