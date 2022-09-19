@@ -1,0 +1,9 @@
+{
+  "db": {
+    "address": "server",
+    "port": "1433",
+    "user": "user",
+    "password": "pass",
+    "schema" : "TestSchema"
+  }
+}

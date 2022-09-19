@@ -4,6 +4,8 @@ import (
 	"go-clean-architecture/src/core/application/interfaces/repositories"
 	"go-clean-architecture/src/core/application/interfaces/services"
 	"go-clean-architecture/src/core/domain/entities"
+	"go-clean-architecture/src/infastructure/persistence/mssql/mssql_connection"
+	"go-clean-architecture/src/infastructure/persistence/mssql/repositories"
 )
 
 type UpdateUserHandler struct {
@@ -11,13 +13,18 @@ type UpdateUserHandler struct {
 	UserRepository interface_repositories.UserRepository
 }
 
-func CreateUpdateUserHandler(logger interface_services.LoggerService, userRepository interface_repositories.UserRepository) *UpdateUserHandler {
+func CreateUpdateUserHandler(logger interface_services.LoggerService) *UpdateUserHandler {
 	return &UpdateUserHandler{
-		Logger:         logger,
-		UserRepository: userRepository,
+		Logger: logger,
 	}
 }
 
 func (handler *UpdateUserHandler) UpdateUser(user entities.User) error {
-	return handler.UserRepository.UpdateUser(user)
+	db := mssql_connection.CreateConnection()
+	tx := db.Begin()
+	userRepository := repositories.CreateUserRepository(db)
+	err := userRepository.UpdateUserWithTransaction(tx, user)
+	tx.Commit()
+
+	return err
 }

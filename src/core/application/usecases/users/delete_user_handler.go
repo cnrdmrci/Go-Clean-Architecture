@@ -3,6 +3,8 @@ package usecases
 import (
 	"go-clean-architecture/src/core/application/interfaces/repositories"
 	"go-clean-architecture/src/core/application/interfaces/services"
+	"go-clean-architecture/src/infastructure/persistence/mssql/mssql_connection"
+	"go-clean-architecture/src/infastructure/persistence/mssql/repositories"
 )
 
 type DeleteUserByIdHandler struct {
@@ -10,13 +12,17 @@ type DeleteUserByIdHandler struct {
 	UserRepository interface_repositories.UserRepository
 }
 
-func CreateDeleteUserHandler(logger interface_services.LoggerService, userRepository interface_repositories.UserRepository) *DeleteUserByIdHandler {
+func CreateDeleteUserHandler(logger interface_services.LoggerService) *DeleteUserByIdHandler {
 	return &DeleteUserByIdHandler{
-		Logger:         logger,
-		UserRepository: userRepository,
+		Logger: logger,
 	}
 }
 
 func (handler *DeleteUserByIdHandler) DeleteUserById(id int) error {
-	return handler.UserRepository.DeleteUserById(id)
+	db := mssql_connection.CreateConnection()
+	tx := db.Begin()
+	userRepository := repositories.CreateUserRepository(db)
+	err := userRepository.DeleteUserByIdWithTransaction(tx, id)
+	tx.Commit()
+	return err
 }

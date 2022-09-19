@@ -4,6 +4,8 @@ import (
 	"go-clean-architecture/src/core/application/interfaces/repositories"
 	"go-clean-architecture/src/core/application/interfaces/services"
 	"go-clean-architecture/src/core/domain/entities"
+	"go-clean-architecture/src/infastructure/persistence/mssql/mssql_connection"
+	"go-clean-architecture/src/infastructure/persistence/mssql/repositories"
 )
 
 type ReadUserByIdHandler struct {
@@ -11,13 +13,14 @@ type ReadUserByIdHandler struct {
 	UserRepository interface_repositories.UserRepository
 }
 
-func CreateReadUserByIdHandler(logger interface_services.LoggerService, userRepository interface_repositories.UserRepository) *ReadUserByIdHandler {
+func CreateReadUserByIdHandler(logger interface_services.LoggerService) *ReadUserByIdHandler {
 	return &ReadUserByIdHandler{
-		Logger:         logger,
-		UserRepository: userRepository,
+		Logger: logger,
 	}
 }
 
 func (handler *ReadUserByIdHandler) ReadUserById(id int) (entities.User, error) {
-	return handler.UserRepository.ReadUserById(id)
+	db := mssql_connection.CreateConnection()
+	userRepository := repositories.CreateUserRepository(db)
+	return userRepository.ReadUserById(id)
 }
