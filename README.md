@@ -1,5 +1,7 @@
 # Clean Architecture With Go
 
+![image](https://user-images.githubusercontent.com/16361055/191124583-9678efaf-b650-4d54-93ec-58770701e43b.png)
+
 ## Clean Architecture
 
 Uygulamanın daha iyi test edilebilir olmasını, sürdürülebilirliğini ve güvenilirliğini sağlamak amaçlanmıştır. Klasik bilinen n katmanlı mimari yapısındaki karşılaşılan zorlukları ele alarak bunlara çözüm sağlamayı amaçlamaktadır. Katmanlar arası gevşek bir bağımlılık kurmayı hedeflemektedir.
